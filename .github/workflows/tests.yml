@@ -1,0 +1,34 @@
+name: Mobile Security Lab Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Run synthetic insecure assessment
+        run: python -m src.reporting data/synthetic_insecure_manifest.xml
+      - name: Validate hardened baseline
+        run: |
+          python - <<'PY'
+          from src.analyzer import analyze_manifest
+          _, findings, score = analyze_manifest('data/synthetic_hardened_manifest.xml')
+          assert findings == [], findings
+          assert score == 0, score
+          print('Hardened synthetic baseline passed.')
+          PY
