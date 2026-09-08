@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.synthetic.hardened">
+    <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="35" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:allowBackup="false"
+        android:debuggable="false"
+        android:usesCleartextTraffic="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:label="Synthetic Hardened Demo">
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <service
+            android:name=".SyncService"
+            android:exported="false" />
+    </application>
+</manifest>
